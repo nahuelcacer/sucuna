@@ -28,6 +28,8 @@ class PersonaContactoView(APIView):
         contactos = persona.contacto_set.all()
         serializer = ContactoSerializer(contactos, many=True)
         return Response(serializer.data)
+    
+    
     def post(self, request, persona_id):
         try:
             persona = Persona.objects.get(id=persona_id)

@@ -15,7 +15,7 @@ class Persona(models.Model):
         return self.name
     
 class Contacto(models.Model):
-    persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    persona = models.ForeignKey(Persona,related_name="contactos", on_delete=models.CASCADE)
     email = models.EmailField()
     phone_number = models.CharField(max_length=20)
 
