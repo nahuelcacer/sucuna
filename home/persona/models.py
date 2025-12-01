@@ -23,7 +23,7 @@ class Contacto(models.Model):
         return f"{self.persona.name} - {self.email}"
         
 class PaymentInfo(models.Model):
-    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name="payment_infos")
+    persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name="payment_infos")
     card_number = models.CharField(max_length=16)
     expiration_date = models.DateField()
     cvv = models.CharField(max_length=4)
