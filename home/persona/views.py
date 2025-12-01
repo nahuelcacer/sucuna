@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Persona
-from .serializers import ContactoSerializer, ContactoSerializer, PersonaSerializer
+from .serializers import ContactoSerializer, ContactoSerializer, PaymentInfoSerializer, PersonaSerializer
 from rest_framework.views import APIView, Response, status  
 # Create your views here.
 class PersonaListCreateView(APIView):
@@ -37,6 +37,30 @@ class PersonaContactoView(APIView):
             return Response({"error": "Persona not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = ContactoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(persona=persona)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PaymentInfoView(APIView):
+    def get(self, request, persona_id):
+        try:
+            persona = Persona.objects.get(id=persona_id)
+        except Persona.DoesNotExist:
+            return Response({"error": "Persona not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        payment_infos = persona.paymentinfo_set.all()
+        serializer = PaymentInfoSerializer(payment_infos, many=True)
+        return Response(serializer.data)
+    
+    
+    def post(self, request, persona_id):
+        try:
+            persona = Persona.objects.get(id=persona_id)
+        except Persona.DoesNotExist:
+            return Response({"error": "Persona not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = PaymentInfoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(persona=persona)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
