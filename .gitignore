@@ -4,6 +4,7 @@ __pycache__/
 *.so
 .Python
 env/
+ent/
 venv/
 ENV/
 build/
@@ -32,6 +33,7 @@ db.sqlite3
 .env
 .env.local
 .venv
+.ent
 
 # IDE
 .vscode/
