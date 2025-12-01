@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Persona
+from .models import Persona, PaymentInfo
 from .serializers import ContactoSerializer, ContactoSerializer, PaymentInfoSerializer, PersonaSerializer
 from rest_framework.views import APIView, Response, status  
 # Create your views here.
@@ -48,9 +48,12 @@ class PaymentInfoView(APIView):
             persona = Persona.objects.get(id=persona_id)
         except Persona.DoesNotExist:
             return Response({"error": "Persona not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        payment_infos = persona.paymentinfo_set.all()
-        serializer = PaymentInfoSerializer(payment_infos, many=True)
+        
+        payment_info = PaymentInfo.objects.filter(persona=persona).first()
+        if not payment_info:
+            return Response({"error": "Payment info not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = PaymentInfoSerializer(payment_info)
         return Response(serializer.data)
     
     
