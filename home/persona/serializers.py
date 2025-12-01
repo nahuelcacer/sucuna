@@ -14,8 +14,8 @@ class PaymentInfoSerializer(serializers.ModelSerializer):
      
 class PersonaSerializer(serializers.ModelSerializer):
     contactos = ContactoSerializer(many=True, read_only=True)
-    payment_infos = PaymentInfoSerializer(many=True, read_only=True)
+    payment_info = PaymentInfoSerializer(read_only=True)
 
     class Meta:
         model = Persona
-        fields = ['id', 'name', 'code_ib', 'state' , 'contactos', 'payment_infos']
+        fields = ['id', 'name', 'code_ib', 'state' , 'contactos', 'payment_info']
